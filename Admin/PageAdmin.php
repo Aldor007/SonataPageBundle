@@ -22,10 +22,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Cache\CacheManagerInterface;
 use Sonata\PageBundle\Exception\InternalErrorException;
 use Sonata\PageBundle\Exception\PageNotFoundException;
+use Sonata\PageBundle\Form\Type\PageSelectorType;
+use Sonata\PageBundle\Form\Type\TemplateChoiceType;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Model\PageManagerInterface;
 use Sonata\PageBundle\Model\SiteInterface;
 use Sonata\PageBundle\Model\SiteManagerInterface;
+use Sonata\PageBundle\Form\Type\PageTypeChoiceType;
 
 /**
  * Admin definition for the Page class.
@@ -283,7 +286,7 @@ class PageAdmin extends AbstractAdmin
         $datagridMapper
             ->add('site')
             ->add('name')
-            ->add('type', null, array('field_type' => 'sonata_page_type_choice'))
+            ->add('type', null, array('field_type' => PageTypeChoiceType::class ))
             ->add('pageAlias')
             ->add('parent')
             ->add('edited')
@@ -346,21 +349,21 @@ class PageAdmin extends AbstractAdmin
         if ($this->hasSubject() && !$this->getSubject()->isInternal()) {
             $formMapper
                 ->with('form_page.group_main_label')
-                    ->add('type', 'sonata_page_type_choice', array('required' => false))
+                    ->add('type', PageTypeChoiceType::class, array('required' => false))
                 ->end()
             ;
         }
 
         $formMapper
             ->with('form_page.group_main_label')
-                ->add('templateCode', 'sonata_page_template', array('required' => true))
+                ->add('templateCode', TemplateChoiceType::class, array('required' => true))
             ->end()
         ;
 
         if (!$this->getSubject() || ($this->getSubject() && $this->getSubject()->getParent()) || ($this->getSubject() && !$this->getSubject()->getId())) {
             $formMapper
                 ->with('form_page.group_main_label')
-                    ->add('parent', 'sonata_page_selector', array(
+                    ->add('parent', PageSelectorType::class, array(
                         'page' => $this->getSubject() ?: null,
                         'site' => $this->getSubject() ? $this->getSubject()->getSite() : null,
                         'model_manager' => $this->getModelManager(),
@@ -381,7 +384,7 @@ class PageAdmin extends AbstractAdmin
             $formMapper
                 ->with('form_page.group_main_label')
                     ->add('pageAlias', null, array('required' => false))
-                    ->add('target', 'sonata_page_selector', array(
+                    ->add('target', PageSelectorType::class, array(
                         'page' => $this->getSubject() ?: null,
                         'site' => $this->getSubject() ? $this->getSubject()->getSite() : null,
                         'model_manager' => $this->getModelManager(),

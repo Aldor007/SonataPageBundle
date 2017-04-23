@@ -15,7 +15,7 @@ use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Model\PageManagerInterface;
 use Sonata\PageBundle\Model\SiteInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
+use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -51,7 +51,7 @@ class PageSelectorType extends AbstractType
             'page' => null,
             'site' => null,
             'choice_list' => function (Options $opts, $previousValue) use ($that) {
-                return new SimpleChoiceList($that->getChoices($opts));
+                return new ArrayChoiceList($that->getChoices($opts));
             },
             'choice_translation_domain' => false,
             'filter_choice' => array(

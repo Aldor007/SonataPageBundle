@@ -225,7 +225,7 @@ class BlockAdmin extends BaseBlockAdmin
     private function getDefaultTemplate(BlockServiceInterface $blockService)
     {
         $resolver = new OptionsResolver();
-        $blockService->setDefaultSettings($resolver);
+        $blockService->configureSettings($resolver);
         $options = $resolver->resolve();
 
         if (isset($options['template'])) {

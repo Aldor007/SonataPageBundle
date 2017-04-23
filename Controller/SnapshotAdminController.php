@@ -12,6 +12,7 @@
 namespace Sonata\PageBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
+use Sonata\PageBundle\Form\Type\CreateSnapshotType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -46,10 +47,10 @@ class SnapshotAdminController extends Controller
 
         $snapshot->setPage($page);
 
-        $form = $this->createForm('sonata_page_create_snapshot', $snapshot);
+        $form = $this->createForm(CreateSnapshotType::class, $snapshot);
 
         if ($request->getMethod() == 'POST') {
-            $form->submit($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $snapshotManager = $this->get('sonata.page.manager.snapshot');
